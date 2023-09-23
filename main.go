@@ -22,6 +22,7 @@ func main() {
 	router.GET("/discounts", discounts.GetDiscounts)
 	router.GET("/events", events.GetEvents)
 	router.GET("/missing", missinglist.GetMissingList)
+	router.POST("/discounts", discounts.PostDiscount)
 
 	router.Run(":8080")
 
