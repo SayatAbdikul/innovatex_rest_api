@@ -1,4 +1,4 @@
-package discounts
+package events
 
 import (
 	"net/http"
@@ -7,33 +7,34 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Discount struct {
-	ID       int    `json:"id"`
-	Name     string `json:"name"`
-	OldPrice int    `json:"oldprice"`
-	NewPrice int    `json:"newprice"`
+type Event struct {
+	ID    int    `json:"id"`
+	Name  string `json:"name"`
+	Date  string `json:"date"`
+	Time  string `json:"time"`
+	Image string `json:"image"`
 }
 
-func GetDiscounts(c *gin.Context) {
+func GetEvents(c *gin.Context) {
 	server.Connect()
 	defer server.DB.Close()
-	rows, err := server.DB.Query("SELECT * FROM discounts")
+	rows, err := server.DB.Query("SELECT * FROM events")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database query error"})
 		return
 	}
 	defer rows.Close()
-	var discounts []Discount
+	var events []Event
 
 	// Iterate through the rows and scan data into the `discounts` slice
 	for rows.Next() {
-		var discount Discount
-		err := rows.Scan(&discount.Name, &discount.OldPrice, &discount.NewPrice, &discount.ID)
+		var event Event
+		err := rows.Scan(&event.ID, &event.Name, &event.Date, &event.Time, &event.Image)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error scanning rows"})
 			return
 		}
-		discounts = append(discounts, discount)
+		events = append(events, event)
 	}
 
 	// Check for errors from iterating over rows
@@ -43,6 +44,6 @@ func GetDiscounts(c *gin.Context) {
 	}
 
 	// Send the discounts slice as a JSON response
-	c.JSON(http.StatusOK, discounts)
+	c.JSON(http.StatusOK, events)
 
 }

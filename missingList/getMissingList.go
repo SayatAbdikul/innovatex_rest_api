@@ -1,4 +1,4 @@
-package discounts
+package missinglist
 
 import (
 	"net/http"
@@ -7,33 +7,33 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Discount struct {
-	ID       int    `json:"id"`
-	Name     string `json:"name"`
-	OldPrice int    `json:"oldprice"`
-	NewPrice int    `json:"newprice"`
+type Missing struct {
+	ID         int    `json:"id"`
+	Category   string `json:"category"`
+	Name       string `json:"name"`
+	Additional string `json:"additional"`
 }
 
-func GetDiscounts(c *gin.Context) {
+func GetMissingList(c *gin.Context) {
 	server.Connect()
 	defer server.DB.Close()
-	rows, err := server.DB.Query("SELECT * FROM discounts")
+	rows, err := server.DB.Query("SELECT * FROM missingList")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database query error"})
 		return
 	}
 	defer rows.Close()
-	var discounts []Discount
+	var list []Missing
 
 	// Iterate through the rows and scan data into the `discounts` slice
 	for rows.Next() {
-		var discount Discount
-		err := rows.Scan(&discount.Name, &discount.OldPrice, &discount.NewPrice, &discount.ID)
+		var missing Missing
+		err := rows.Scan(&missing.ID, &missing.Category, &missing.Name, &missing.Additional)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error scanning rows"})
 			return
 		}
-		discounts = append(discounts, discount)
+		list = append(list, missing)
 	}
 
 	// Check for errors from iterating over rows
@@ -43,6 +43,6 @@ func GetDiscounts(c *gin.Context) {
 	}
 
 	// Send the discounts slice as a JSON response
-	c.JSON(http.StatusOK, discounts)
+	c.JSON(http.StatusOK, list)
 
 }
