@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	discounts "github.com/SayatAbdikul/innovatex_rest_api/Discounts"
+	discounts "github.com/SayatAbdikul/innovatex_rest_api/discounts"
 	"github.com/SayatAbdikul/innovatex_rest_api/events"
 	missinglist "github.com/SayatAbdikul/innovatex_rest_api/missingList"
 	"github.com/SayatAbdikul/innovatex_rest_api/server"
@@ -23,6 +23,7 @@ func main() {
 	router.GET("/events", events.GetEvents)
 	router.GET("/missing", missinglist.GetMissingList)
 	router.POST("/discounts", discounts.PostDiscount)
+	router.PATCH("/discounts", discounts.PatchDiscount)
 
 	router.Run(":8080")
 

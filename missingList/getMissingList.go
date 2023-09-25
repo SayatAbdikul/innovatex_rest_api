@@ -12,6 +12,7 @@ type Missing struct {
 	Category   string `json:"category"`
 	Name       string `json:"name"`
 	Additional string `json:"additional"`
+	Image      string `json:"image"`
 }
 
 func GetMissingList(c *gin.Context) {
@@ -28,7 +29,7 @@ func GetMissingList(c *gin.Context) {
 	// Iterate through the rows and scan data into the `discounts` slice
 	for rows.Next() {
 		var missing Missing
-		err := rows.Scan(&missing.ID, &missing.Category, &missing.Name, &missing.Additional)
+		err := rows.Scan(&missing.ID, &missing.Category, &missing.Name, &missing.Additional, &missing.Image)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error scanning rows"})
 			return

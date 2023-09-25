@@ -16,7 +16,7 @@ func PostDiscount(c *gin.Context) {
 		return
 	}
 	var err error
-	_, err = server.DB.Exec("INSERT INTO discounts (title, oldprice, newprice) VALUES ($1, $2, $3)", product.Name, product.OldPrice, product.NewPrice)
+	_, err = server.DB.Exec("INSERT INTO discounts (title, oldprice, newprice, image) VALUES ($1, $2, $3, $4)", product.Name, product.OldPrice, product.NewPrice, product.Image)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database query error"})
 		return

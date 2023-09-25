@@ -12,6 +12,7 @@ type Discount struct {
 	Name     string `json:"name"`
 	OldPrice int    `json:"oldprice"`
 	NewPrice int    `json:"newprice"`
+	Image    string `json:"image"`
 }
 
 func GetDiscounts(c *gin.Context) {
@@ -28,7 +29,8 @@ func GetDiscounts(c *gin.Context) {
 	// Iterate through the rows and scan data into the `discounts` slice
 	for rows.Next() {
 		var discount Discount
-		err := rows.Scan(&discount.Name, &discount.OldPrice, &discount.NewPrice, &discount.ID)
+		x := &discount.Image
+		err := rows.Scan(&discount.Name, &discount.OldPrice, &discount.NewPrice, &discount.ID, x)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error scanning rows"})
 			return
